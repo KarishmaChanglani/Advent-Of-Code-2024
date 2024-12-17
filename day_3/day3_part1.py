@@ -11,7 +11,7 @@ for txt in valid_list:
     newstr = txt.replace("mul(", "")
     newstr = newstr.replace(")","")
     numbers = newstr.split(",")
-    numbers = splitLine = list(map(int, numbers))
+    numbers = list(map(int, numbers))
     if(len(numbers) > 2):
         continue
     answer += numbers[0] * numbers[1]

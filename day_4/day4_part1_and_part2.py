@@ -1,5 +1,6 @@
 import re
 
+
 def create_grid():
     grid = []
 
@@ -39,7 +40,7 @@ def count_with_pattern(grid, pattern):
 def check_x_mas(grid, i, j):
     rows, cols = len(grid), len(grid[0])
 
-    if i - 1 < 0 or i + 1 >= rows or j - 1 < 0 or j + 1 >= cols: # for corners
+    if i - 1 < 0 or i + 1 >= rows or j - 1 < 0 or j + 1 >= cols:  # for corners
         return False
 
     patterns = ["MAS", "SAM"]
@@ -67,10 +68,8 @@ if __name__ == "__main__":
     rows, cols = len(grid), len(grid[0])
     count = 0
     for i in range(1, rows - 1):
-        for j in range(1,cols - 1):
+        for j in range(1, cols - 1):
             if check_x_mas(grid, i, j):
                 count += 1
 
     print("Second part: " + str(count))
-
-
