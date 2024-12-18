@@ -1,3 +1,6 @@
+import graphlib
+
+
 def load_rules():
     file = open("input_day5_rules.txt", 'r')
     f = file.readlines()
@@ -11,26 +14,32 @@ def load_rules():
     return rules
 
 
-def check_update(update, rules):
-    for rule in rules:
-        try:
-            i, j = update.index(rule[0]), update.index(rule[1])
-            if (i > j):
+def is_valid(update_to_check, check_rules):
+    for a, b in check_rules:
+        if a in update_to_check and b in update_to_check:
+            i, j = update_to_check.index(a), update_to_check.index(b)
+            if i > j:
                 return False
-        except ValueError:
-            continue
     return True
 
 
-def fix(update, rules):
-    for rule in rules:
-        if rule[0] in update and rule[1] in update:
-            i, j = update.index(rule[0]), update.index(rule[1])
-            if i > j:
-                temp = update[i]
-                update[i] = update[j]
-                update[j] = temp
-    return update
+def sort(bad_update, sorting_rules):
+    i = 0
+    while i != len(bad_update):
+        i = len(bad_update)
+        for rule in sorting_rules:
+            a, b = rule[0], rule[1]
+            # Value check
+            if a not in bad_update or b not in bad_update:
+                continue
+            first_page = bad_update.index(a)
+            second_page = bad_update.index(b)
+            if first_page > second_page:
+                i -= 1
+                bad_update.pop(first_page)
+                bad_update.insert(second_page, a)
+
+    return bad_update
 
 
 if __name__ == "__main__":
@@ -45,16 +54,17 @@ if __name__ == "__main__":
     for line in f:
         update = line.split(",")
         update = list(map(int, update))
-        if check_update(update, rules):
-            l = len(update)
-            answer += update[int(abs(l / 2))]
+        if is_valid(update, rules):
+            answer += update[int(abs(len(update) / 2))]
         else:
             bad_updates.append(update)
-
     print("First part:" + str(answer))
+
     answer = 0
+
     for update in bad_updates:
-        new_update = fix(update, rules)
-        answer += new_update[int(abs(len(new_update) / 2))]
+        new = sort(update, rules)
+        if new is not None:
+            answer += new[int(abs(len(new) / 2))]
 
     print("Second part:" + str(answer))
